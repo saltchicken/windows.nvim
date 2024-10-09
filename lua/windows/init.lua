@@ -49,6 +49,7 @@ function Windows:yes_no_prompt(question, cb_yes, cb_no)
 
 	vim.api.nvim_buf_set_keymap(buf, "n", "y", "", {
 		callback = function()
+			print("callback called")
 			cb_yes()
 		end,
 	})
