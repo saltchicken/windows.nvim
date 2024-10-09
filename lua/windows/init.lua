@@ -42,8 +42,21 @@ function Windows:yes_no_prompt(question, cb_yes, cb_no)
 		footer_pos = "center",
 	}
 
+	vim.api.nvim_buf_set_lines(buf, 0, -1, false, { question })
+
 	local win = vim.api.nvim_open_win(buf, true, win_opts)
 	table.insert(self.active_windows, { win, buf })
+
+	vim.api.nvim_buf_set_keymap(buf, "n", "y", "", {
+		callback = function()
+			cb_yes()
+		end,
+	})
+	vim.api.nvim_buf_set_keymap(buf, "n", "n", "", {
+		callback = function()
+			cb_no()
+		end,
+	})
 end
 
 return Windows
