@@ -20,12 +20,17 @@ function Windows:floating_window(opts, content)
 		border = "single",
 		footer = opts.footer,
 	}
+
+	vim.api.nvim_buf_set_lines(buf, 0, -1, false, { content })
+
 	local win = vim.api.nvim_open_win(buf, true, win_opts)
 
 	vim.api.nvim_create_autocmd({ "BufWipeout", "BufDelete", "BufWinLeave" }, {
 		buffer = buf,
 		callback = function()
-			print("closed")
+			if opts.on_exit then
+				opts.on_exit()
+			end
 		end,
 	})
 
