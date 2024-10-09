@@ -9,6 +9,7 @@ end
 
 function Windows:floating_window(opts, content)
 	local buf = vim.api.nvim_create_buf(false, true)
+	print(opts.height)
 
 	local win_opts = {
 		relative = "editor",
