@@ -21,7 +21,7 @@ function Windows:floating_window(opts, content)
 		footer = opts.footer,
 	}
 
-	vim.api.nvim_buf_set_lines(buf, 0, -1, false, { content })
+	vim.api.nvim_buf_set_lines(buf, 0, -1, false, content)
 
 	local win = vim.api.nvim_open_win(buf, true, win_opts)
 
