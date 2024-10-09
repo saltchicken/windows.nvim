@@ -22,7 +22,7 @@ function Windows:floating_window(opts, content)
 	}
 	local win = vim.api.nvim_open_win(buf, true, win_opts)
 
-	vim.api.nvim_create_autocmd({ "BufWipeout", "BufDelete" }, {
+	vim.api.nvim_create_autocmd({ "BufWipeout", "BufDelete", "BufWinLeave" }, {
 		buffer = buf,
 		callback = function()
 			print("closed")
