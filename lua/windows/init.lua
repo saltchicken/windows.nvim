@@ -7,20 +7,28 @@ function Windows:new()
 	return obj
 end
 
-function Windows:floating_window(width, height, col, row, footer)
+function Windows:floating_window(opts, content)
 	local buf = vim.api.nvim_create_buf(false, true)
 
 	local win_opts = {
 		relative = "editor",
-		width = width,
-		height = height,
-		col = col,
-		row = row,
+		width = opts.width,
+		height = opts.height,
+		col = opts.col,
+		row = opts.row,
 		style = "minimal",
 		border = "single",
-		footer = footer,
+		footer = opts.footer,
 	}
 	local win = vim.api.nvim_open_win(buf, true, win_opts)
+
+	vim.api.nvim_create_autocmd({ "BufWipeout", "BufDelete" }, {
+		buffer = buf,
+		callback = function()
+			opts.on_exit()
+		end,
+	})
+
 	table.insert(self.active_windows, { win, buf })
 end
 
@@ -49,7 +57,6 @@ function Windows:yes_no_prompt(question, cb_yes, cb_no)
 
 	vim.api.nvim_buf_set_keymap(buf, "n", "y", "", {
 		callback = function()
-			print("callback called")
 			cb_yes()
 		end,
 	})
