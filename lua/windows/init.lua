@@ -9,7 +9,6 @@ end
 
 function Windows:floating_window(opts, content)
 	local buf = vim.api.nvim_create_buf(false, true)
-	print(opts.height)
 
 	local win_opts = {
 		relative = "editor",
@@ -22,9 +21,10 @@ function Windows:floating_window(opts, content)
 		footer = opts.footer,
 	}
 	local win = vim.api.nvim_open_win(buf, true, win_opts)
+	local bufnr = vim.api.nvim_win_get_buf(win)
 
 	vim.api.nvim_create_autocmd({ "BufWipeout", "BufDelete" }, {
-		buffer = buf,
+		buffer = bufnr,
 		callback = function()
 			print("closed")
 			opts.on_exit()
