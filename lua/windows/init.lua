@@ -21,13 +21,11 @@ function Windows:floating_window(opts, content)
 		footer = opts.footer,
 	}
 	local win = vim.api.nvim_open_win(buf, true, win_opts)
-	local bufnr = vim.api.nvim_win_get_buf(win)
 
 	vim.api.nvim_create_autocmd({ "BufWipeout", "BufDelete" }, {
-		buffer = bufnr,
+		buffer = buf,
 		callback = function()
 			print("closed")
-			opts.on_exit()
 		end,
 	})
 
