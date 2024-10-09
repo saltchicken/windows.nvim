@@ -26,6 +26,7 @@ function Windows:floating_window(opts, content)
 	vim.api.nvim_create_autocmd({ "BufWipeout", "BufDelete" }, {
 		buffer = buf,
 		callback = function()
+			print("closed")
 			opts.on_exit()
 		end,
 	})
