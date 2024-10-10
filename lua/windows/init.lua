@@ -46,16 +46,16 @@ function Windows:floating_window(opts, content)
 		end,
 	})
 
+	-- Set keymaps if specified
 	if opts.keymaps then
-		print("yes")
+		for _, keymap in ipairs(opts.keymaps) do
+			vim.api.nvim_buf_set_keymap(buf, keymap[1], keymap[2], "", {
+				callback = keymap[3],
+			})
+		end
 	end
 
-	-- vim.api.nvim_buf_set_keymap(buf, "n", "u", "", {
-	-- 	callback = function()
-	-- 		git.get_current_revision()
-	-- 	end,
-	-- })
-
+	-- Add the current window and buf reference to parent active windows
 	table.insert(self.active_windows, { win, buf })
 end
 
