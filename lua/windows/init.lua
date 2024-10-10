@@ -110,6 +110,15 @@ function Windows:yes_no_prompt(question, cb_yes, cb_no)
 		-- 		vim.api.nvim_win_close(win, true)
 		-- 	end,
 		-- })
+		vim.api.nvim_create_autocmd({ "BufWipeout", "BufDelete", "BufWinLeave" }, {
+			buffer = buf,
+			callback = function()
+				self.yes_no_prompt_open = false
+				-- if opts.on_exit then
+				--   opts.on_exit()
+				-- end
+			end,
+		})
 	end
 end
 
