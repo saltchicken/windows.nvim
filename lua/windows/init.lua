@@ -10,6 +10,11 @@ end
 function Windows:floating_window(opts, content)
 	local buf = vim.api.nvim_create_buf(false, true)
 
+	if opts.centered == true then
+		opts.col = math.floor((vim.o.columns - opts.width) / 2)
+		opts.row = math.floor(((vim.o.lines - opts.height) / 2) - 1)
+	end
+
 	local win_opts = {
 		relative = "editor",
 		width = opts.width,
