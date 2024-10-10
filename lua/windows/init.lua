@@ -4,6 +4,8 @@ Windows.__index = Windows
 function Windows:new()
 	local obj = setmetatable({}, Windows)
 	obj.active_windows = {}
+	obj.floating_window_open = false
+	obj.yes_no_prompt_open = false
 	return obj
 end
 
@@ -60,51 +62,55 @@ function Windows:floating_window(opts, content)
 end
 
 function Windows:yes_no_prompt(question, cb_yes, cb_no)
-	local buf = vim.api.nvim_create_buf(false, true)
-	local width = 50
-	local height = 3
-	local footer = "Press 'y' for yes, press 'n' for no"
+	if self.yes_no_prompt_open == false then
+		local buf = vim.api.nvim_create_buf(false, true)
+		local width = 50
+		local height = 3
+		local footer = "Press 'y' for yes, press 'n' for no"
 
-	local win_opts = {
-		relative = "editor",
-		width = width,
-		height = height,
-		col = math.floor((vim.o.columns - width) / 2),
-		row = math.floor(((vim.o.lines - height) / 2) - 1),
-		style = "minimal",
-		border = "single",
-		footer = footer,
-		footer_pos = "center",
-	}
+		local win_opts = {
+			relative = "editor",
+			width = width,
+			height = height,
+			col = math.floor((vim.o.columns - width) / 2),
+			row = math.floor(((vim.o.lines - height) / 2) - 1),
+			style = "minimal",
+			border = "single",
+			footer = footer,
+			footer_pos = "center",
+		}
 
-	vim.api.nvim_buf_set_lines(buf, 0, -1, false, { question })
+		vim.api.nvim_buf_set_lines(buf, 0, -1, false, { question })
 
-	local win = vim.api.nvim_open_win(buf, true, win_opts)
-	table.insert(self.active_windows, { win, buf })
+		local win = vim.api.nvim_open_win(buf, true, win_opts)
 
-	vim.api.nvim_buf_set_keymap(buf, "n", "y", "", {
-		callback = function()
-			if cb_yes then
-				cb_yes()
-			else
-				print("Callback not set for y")
-			end
-		end,
-	})
-	vim.api.nvim_buf_set_keymap(buf, "n", "n", "", {
-		callback = function()
-			if cb_no then
-				cb_no()
-			else
-				print("Callback not set for n")
-			end
-		end,
-	})
-	vim.api.nvim_buf_set_keymap(buf, "n", "q", "", {
-		callback = function()
-			vim.api.nvim_win_close(win, true)
-		end,
-	})
+		table.insert(self.active_windows, { win, buf })
+		self.yes_no_prompt_open = true
+
+		vim.api.nvim_buf_set_keymap(buf, "n", "y", "", {
+			callback = function()
+				if cb_yes then
+					cb_yes()
+				else
+					print("Callback not set for y")
+				end
+			end,
+		})
+		vim.api.nvim_buf_set_keymap(buf, "n", "n", "", {
+			callback = function()
+				if cb_no then
+					cb_no()
+				else
+					print("Callback not set for n")
+				end
+			end,
+		})
+		-- vim.api.nvim_buf_set_keymap(buf, "n", "q", "", {
+		-- 	callback = function()
+		-- 		vim.api.nvim_win_close(win, true)
+		-- 	end,
+		-- })
+	end
 end
 
 -- function Windows:list_active_windows()
