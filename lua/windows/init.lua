@@ -4,7 +4,6 @@ Windows.__index = Windows
 function Windows:new()
 	local obj = setmetatable({}, Windows)
 	obj.active_windows = {}
-	obj.floating_window_id = 1777
 	return obj
 end
 
@@ -25,7 +24,7 @@ function Windows:floating_window(opts, content)
 	end
 
 	local win_opts = {
-		relative = "win",
+		relative = "editor",
 		width = opts.width,
 		height = opts.height,
 		col = opts.col,
@@ -33,7 +32,6 @@ function Windows:floating_window(opts, content)
 		style = "minimal",
 		border = "single",
 		footer = opts.footer,
-		win = self.floating_window_id,
 	}
 
 	vim.api.nvim_buf_set_lines(buf, 0, -1, false, content)
