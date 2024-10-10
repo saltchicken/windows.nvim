@@ -15,6 +15,13 @@ function Windows:floating_window(opts, content)
 		opts.row = math.floor(((vim.o.lines - opts.height) / 2) - 1)
 	end
 
+	if opts.fullscreen == true then
+		local screen_width = vim.o.columns
+		local screen_height = vim.o.lines
+		opts.width = math.floor(screen_width * 0.9)
+		opts.height = math.floor(screen_height * 0.9)
+	end
+
 	local win_opts = {
 		relative = "editor",
 		width = opts.width,
