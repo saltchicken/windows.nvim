@@ -49,6 +49,7 @@ function Windows:floating_window(opts, content)
 	-- Set keymaps if specified
 	if opts.keymaps then
 		for _, keymap in ipairs(opts.keymaps) do
+			print("Creating keymap for : " .. keymap[1] .. "  " .. keymap[2])
 			vim.api.nvim_buf_set_keymap(buf, keymap[1], keymap[2], "", {
 				callback = keymap[3],
 			})
