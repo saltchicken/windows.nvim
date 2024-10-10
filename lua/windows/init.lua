@@ -8,6 +8,7 @@ function Windows:new()
 end
 
 function Windows:floating_window(opts, content)
+	print("Creating window") -- print("hello")
 	local buf = vim.api.nvim_create_buf(false, true)
 
 	if opts.fullscreen == true then
