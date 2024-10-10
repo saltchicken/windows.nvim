@@ -60,7 +60,7 @@ function Windows:floating_window(opts, content)
 end
 
 function Windows:yes_no_prompt(question, cb_yes, cb_no)
-	local buf = vim.api.nvim_create_buf(true, true)
+	local buf = vim.api.nvim_create_buf(false, true)
 	local width = 50
 	local height = 3
 	local footer = "Press 'y' for yes, press 'n' for no"
@@ -98,6 +98,11 @@ function Windows:yes_no_prompt(question, cb_yes, cb_no)
 			else
 				print("Callback not set for n")
 			end
+		end,
+	})
+	vim.api.nvim_buf_set_keymap(buf, "n", "q", "", {
+		callback = function()
+			vim.api.nvim_win_close(win, true)
 		end,
 	})
 end
