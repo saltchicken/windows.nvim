@@ -105,7 +105,7 @@ function Windows:yes_no_prompt(question, cb_yes, cb_no)
 				if cb_no then
 					cb_no()
 				else
-					print("Callback not set for n")
+					vim.api.nvim_win_close(win, true)
 				end
 			end,
 		})
