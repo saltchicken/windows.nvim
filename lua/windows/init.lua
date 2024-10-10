@@ -60,7 +60,7 @@ function Windows:floating_window(opts, content)
 end
 
 function Windows:yes_no_prompt(question, cb_yes, cb_no)
-	local buf = vim.api.nvim_create_buf(false, true)
+	local buf = vim.api.nvim_create_buf(true, true)
 	local width = 50
 	local height = 3
 	local footer = "Press 'y' for yes, press 'n' for no"
