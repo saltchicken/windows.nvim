@@ -46,11 +46,15 @@ function Windows:floating_window(opts, content)
 		end,
 	})
 
-	vim.api.nvim_buf_set_keymap(buf, "n", "u", "", {
-		callback = function()
-			git.get_current_revision()
-		end,
-	})
+	if opts.keymaps then
+		print("yes")
+	end
+
+	-- vim.api.nvim_buf_set_keymap(buf, "n", "u", "", {
+	-- 	callback = function()
+	-- 		git.get_current_revision()
+	-- 	end,
+	-- })
 
 	table.insert(self.active_windows, { win, buf })
 end
