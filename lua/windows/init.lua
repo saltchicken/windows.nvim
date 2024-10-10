@@ -60,6 +60,7 @@ function Windows:floating_window(opts, content)
 end
 
 function Windows:yes_no_prompt(question, cb_yes, cb_no)
+	print("Creating prompt")
 	local buf = vim.api.nvim_create_buf(false, true)
 	local width = 50
 	local height = 3
