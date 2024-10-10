@@ -25,7 +25,7 @@ function Windows:floating_window(opts, content)
 	end
 
 	local win_opts = {
-		relative = "editor",
+		relative = "win",
 		width = opts.width,
 		height = opts.height,
 		col = opts.col,
