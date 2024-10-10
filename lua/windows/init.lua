@@ -10,55 +10,59 @@ function Windows:new()
 end
 
 function Windows:floating_window(opts, content)
-	local buf = vim.api.nvim_create_buf(false, true)
+	if self.floating_window_open == false then
+		local buf = vim.api.nvim_create_buf(false, true)
 
-	if opts.fullscreen == true then
-		local screen_width = vim.o.columns
-		local screen_height = vim.o.lines
-		opts.width = math.floor(screen_width * 0.9)
-		opts.height = math.floor(screen_height * 0.9)
-	end
-
-	if opts.centered == true then
-		opts.col = math.floor((vim.o.columns - opts.width) / 2)
-		opts.row = math.floor(((vim.o.lines - opts.height) / 2) - 1)
-	end
-
-	local win_opts = {
-		relative = "editor",
-		width = opts.width,
-		height = opts.height,
-		col = opts.col,
-		row = opts.row,
-		style = "minimal",
-		border = "single",
-		footer = opts.footer,
-	}
-
-	vim.api.nvim_buf_set_lines(buf, 0, -1, false, content)
-
-	local win = vim.api.nvim_open_win(buf, true, win_opts)
-
-	vim.api.nvim_create_autocmd({ "BufWipeout", "BufDelete", "BufWinLeave" }, {
-		buffer = buf,
-		callback = function()
-			if opts.on_exit then
-				opts.on_exit()
-			end
-		end,
-	})
-
-	-- Set keymaps if specified
-	if opts.keymaps then
-		for _, keymap in ipairs(opts.keymaps) do
-			vim.api.nvim_buf_set_keymap(buf, keymap[1], keymap[2], "", {
-				callback = keymap[3],
-			})
+		if opts.fullscreen == true then
+			local screen_width = vim.o.columns
+			local screen_height = vim.o.lines
+			opts.width = math.floor(screen_width * 0.9)
+			opts.height = math.floor(screen_height * 0.9)
 		end
-	end
 
-	-- Add the current window and buf reference to parent active windows
-	table.insert(self.active_windows, { win, buf })
+		if opts.centered == true then
+			opts.col = math.floor((vim.o.columns - opts.width) / 2)
+			opts.row = math.floor(((vim.o.lines - opts.height) / 2) - 1)
+		end
+
+		local win_opts = {
+			relative = "editor",
+			width = opts.width,
+			height = opts.height,
+			col = opts.col,
+			row = opts.row,
+			style = "minimal",
+			border = "single",
+			footer = opts.footer,
+		}
+
+		vim.api.nvim_buf_set_lines(buf, 0, -1, false, content)
+
+		local win = vim.api.nvim_open_win(buf, true, win_opts)
+
+		vim.api.nvim_create_autocmd({ "BufWipeout", "BufDelete", "BufWinLeave" }, {
+			buffer = buf,
+			callback = function()
+				self.floating_window_open = false
+				if opts.on_exit then
+					opts.on_exit()
+				end
+			end,
+		})
+
+		-- Set keymaps if specified
+		if opts.keymaps then
+			for _, keymap in ipairs(opts.keymaps) do
+				vim.api.nvim_buf_set_keymap(buf, keymap[1], keymap[2], "", {
+					callback = keymap[3],
+				})
+			end
+		end
+
+		-- Add the current window and buf reference to parent active windows
+		table.insert(self.active_windows, { win, buf })
+		self.floating_window_open = true
+	end
 end
 
 function Windows:yes_no_prompt(question, cb_yes, cb_no)
