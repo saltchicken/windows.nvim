@@ -60,7 +60,6 @@ function Windows:floating_window(opts, content)
 end
 
 function Windows:yes_no_prompt(question, cb_yes, cb_no)
-	print("Creating prompt")
 	local buf = vim.api.nvim_create_buf(false, true)
 	local width = 50
 	local height = 3
@@ -85,12 +84,20 @@ function Windows:yes_no_prompt(question, cb_yes, cb_no)
 
 	vim.api.nvim_buf_set_keymap(buf, "n", "y", "", {
 		callback = function()
-			cb_yes()
+			if cb_yes then
+				cb_yes()
+			else
+				print("Callback not set for y")
+			end
 		end,
 	})
 	vim.api.nvim_buf_set_keymap(buf, "n", "n", "", {
 		callback = function()
-			cb_no()
+			if cb_no then
+				cb_no()
+			else
+				print("Callback not set for n")
+			end
 		end,
 	})
 end
