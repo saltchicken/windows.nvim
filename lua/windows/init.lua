@@ -85,4 +85,9 @@ function Windows:yes_no_prompt(question, cb_yes, cb_no)
 	})
 end
 
+function Windows:list_active_windows()
+	for index, value in ipairs(self.active_windows) do
+		print(index, value)
+	end
+end
 return Windows
